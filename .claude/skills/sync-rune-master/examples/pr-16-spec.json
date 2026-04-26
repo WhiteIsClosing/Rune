@@ -1,0 +1,38 @@
+{
+  "branch": "claude/sync-rune-pr-16",
+  "from_branch": "main",
+  "base": "main",
+  "commit_message": "docs(rules): adopt Rune A-TZ timezone constraint (CRITICAL)",
+  "pr_title": "docs(rules): adopt Rune A-TZ timezone constraint (CRITICAL)",
+  "pr_body": "## Summary\n\nApply Rune PR #16 to this project: add the new **A-TZ** (UTC timezone enforcement) constraint as a CRITICAL-level cross-project rule.\n\nSource: https://github.com/WhiteIsClosing/Rune/pull/16\n\n### Changes to `CLAUDE.md`\n\n1. §五 intro: remove '时区' from project-specific examples (it is now master-level)\n2. §五 CRITICAL severity row: add '时区错位（A-TZ）' to typical CRITICAL scenarios\n3. §五.A: add new **A-TZ** row\n4. §五 规则级可观测性: add A-TZ binding example\n5. §七 反模式: add bullet for naive datetime / bare-string timezone aggregation / unlabeled config time literals\n\nGenerated via `.claude/skills/sync-rune-master/sync.py`.\n",
+  "patches": [
+    {
+      "old": "本节编号保留；项目专属规则（如前瞻偏差、时区、框架隔离等）由项目在本节后接续追加",
+      "new": "本节编号保留；项目专属规则（如前瞻偏差、框架隔离等）由项目在本节后接续追加"
+    },
+    {
+      "old": "| **CRITICAL** | 阻塞合并，必须当场修 | DAG 循环依赖（C5）、前瞻偏差、核心计算静默失效 |",
+      "new": "| **CRITICAL** | 阻塞合并，必须当场修 | DAG 循环依赖（C5）、前瞻偏差、时区错位（A-TZ）、核心计算静默失效 |"
+    },
+    {
+      "old": "| A-BND | 数值边界处理：NaN / inf / 空容器 / 长度不足 / 时序间隙 | HIGH |\n",
+      "new": "| A-BND | 数值边界处理：NaN / inf / 空容器 / 长度不足 / 时序间隙 | HIGH |\n| A-TZ | 金融计算时区一律 UTC：内部存储 / 计算用 tz-aware UTC datetime，**禁 naive datetime 参与金融计算**；外部入口（行情、订单、撮合、回测起止）必须显式标注源时区，转 UTC 后再进入计算；配置中时间字段必须显式标注时区（如 `\"America/New_York\"` / `\"UTC\"`），禁裸字符串；跨市场 / 跨数据源聚合必须先对齐 UTC。展示 / 日志 / CLI 输出允许转交易所或本地时区 | **CRITICAL** |\n"
+    },
+    {
+      "old": "**必须维护\"规则级约束表\"**：为本节每条规则绑定自动化工具或形式标记。新增 / 修改规则时同一 PR 必须更新——否则\"规则生效但合规不可观测\" = 静默失效。\n",
+      "new": "**必须维护\"规则级约束表\"**：为本节每条规则绑定自动化工具或形式标记。新增 / 修改规则时同一 PR 必须更新——否则\"规则生效但合规不可观测\" = 静默失效。\n\n**绑定示例（A-TZ）**：自动化用 `mypy --strict` 校验 `datetime` 字段为 tz-aware + 自定义脚本扫描 naive datetime 字面量（如 `datetime(...)` / `datetime.now()` / `pd.Timestamp(...)` 缺 tz 参数）；形式标记用配置 dataclass 时间字段必须含 `tz: str` 或类型为 tz-aware datetime。\n"
+    },
+    {
+      "old": "- ❌ 防御性冗余：在上游已保证的地方再校验 → 三.P4\n",
+      "new": "- ❌ 防御性冗余：在上游已保证的地方再校验 → 三.P4\n- ❌ 金融计算用 naive datetime / 跨时区裸字符串聚合 / 配置裸时间字面量不标 tz → 五.A-TZ\n"
+    }
+  ],
+  "targets": [
+    "WhiteIsClosing/vellum",
+    "WhiteIsClosing/vesper",
+    "WhiteIsClosing/sigil",
+    "WhiteIsClosing/scry",
+    "WhiteIsClosing/mancer",
+    "WhiteIsClosing/vates"
+  ]
+}
