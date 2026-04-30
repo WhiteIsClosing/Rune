@@ -64,6 +64,7 @@ Rune 母版默认不反向传播（见 `rules.md` §一 与 §七）。这个 sk
 
 - `SKILL.md`（本文件）
 - `sync.py` — 单文件 orchestrator（fetch / patch / branch / push / PR）
+- `examples/adoption-localization-spec.json` — Rune §六.步骤 6 用：新项目引入完成后把母版自称视角换成项目自治视角。先 sed 替换 `{{PROJECT}}` / `{{RUNE_COMMIT}}` / `{{RUNE_DATE}}` 占位符，再填 targets 跑 sync.py
 - `examples/pr-16-spec.json` — A-TZ 那次的 spec，可作模板拷贝
 
 ## 参考
