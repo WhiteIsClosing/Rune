@@ -1,0 +1,36 @@
+{
+  "_instructions": "本 spec 是 §六.步骤 6 的本地化模板。使用前先做 sed/全文替换：{{PROJECT}} → 项目名 (如 Stargazer)；{{RUNE_COMMIT}} → 拷贝时 Rune main HEAD 短 sha；{{RUNE_DATE}} → 拷贝日期 (YYYY-MM-DD)。再填 targets，跑 python3 sync.py adoption-localization-spec.json。每条 old 在拷贝完成的 CLAUDE.md (经步骤 3 整段拷贝 + 步骤 5 删 §六 后) 唯一存在；不要在拷贝前跑。",
+  "branch": "claude/localize-rune-adoption",
+  "from_branch": "main",
+  "base": "main",
+  "commit_message": "docs(claude): localize CLAUDE.md to {{PROJECT}} first-person voice\n\nApply Rune §六.步骤 6 本地化检查表：把 §一-§八 中以 Rune 自称视角写的措辞翻转为 {{PROJECT}} 自治视角，避免 dissonance。源自 Rune commit {{RUNE_COMMIT}} ({{RUNE_DATE}})。",
+  "pr_title": "docs(claude): localize CLAUDE.md to {{PROJECT}} first-person voice",
+  "pr_body": "## Summary\n\n按 Rune §六.步骤 6 本地化检查表对 CLAUDE.md §一-§八 做措辞翻转：Rune 自称视角 → {{PROJECT}} 自治视角。源自 Rune commit `{{RUNE_COMMIT}}` ({{RUNE_DATE}})。\n\n## 改动范围 (8 处)\n\n- L1 标题、L3 开头描述\n- 阅读导航 2 行（`母版定位与使用` / `怎么改 Rune 自己`）\n- §一 自称段 + `Rune 自身演化`段\n- §七 标题 + 正文\n- §八 `引入与演化层面`子节剪枝（删 4 条已完成项 / 死链，保留 3 条仍有意义的协作反模式，子节改名）\n\n## Test plan\n\n- [x] sync.py 跑过：每条 patch old 在 CLAUDE.md 唯一匹配\n- [x] 改后 grep `Rune \\| 母版` 仅余协作链路相关引用 (§二沉淀载体、§五 A-F 标签、§七 反馈流程)\n- [x] 章节序 §一-§五 + §七-§九 完整无残片\n\nGenerated via `.claude/skills/sync-rune-master/examples/adoption-localization-spec.json`.",
+  "patches": [
+    {
+      "old": "# Rune — 通用项目规范与方法论\n\n本文件是 Rune 母版规范。新建项目时**整段拷贝本文件内容到项目 `CLAUDE.md` 开头**，作为该项目的工程基线。拷贝完归项目所有，项目自治演化；Rune 母版后续更新不向已有项目反向同步。",
+      "new": "# {{PROJECT}} — 工程基线\n\n本文件是 {{PROJECT}} 的工程基线，由 [Rune](https://github.com/whiteisclosing/rune) 母版（commit `{{RUNE_COMMIT}}`，{{RUNE_DATE}}）整段拷贝引入，已归 {{PROJECT}} 自治。下述 §一–§八 承袭母版（措辞本地化为 {{PROJECT}} 视角）；§九 是 {{PROJECT}} 项目专属内容。"
+    },
+    {
+      "old": "| 母版定位与使用 | 一 |",
+      "new": "| 工程基线定位与使用 | 一 |"
+    },
+    {
+      "old": "| 怎么改 Rune 自己 | 七 |",
+      "new": "| 何时反馈给 Rune 母版 | 七 |"
+    },
+    {
+      "old": "Rune 是一份**母版规范**——新建项目时整段拷贝本文件内容到项目 `CLAUDE.md` 开头，作为该项目的工程基线。\n\n- **拷贝后归项目所有**：内容物理上属于项目，项目可自由增删改\n- **不再有\"跨项目活引用\"**：Rune 不通过 submodule / @ 导入注入到项目，所有规则一旦拷贝就是项目自有资产\n- **单一规范层**：本文件加上项目自加的规则共同构成项目唯一规范，不再区分 L1/L2\n\n**Rune 自身演化**：母版会持续打磨（见 七、元规则），但更新不反向同步到已有项目。母版改动只影响**未来**新建项目。\n\n**项目专属规则放哪**：项目自加的规则直接追加到项目 `CLAUDE.md` 末尾即可——本文件给出的硬约束（A–F 等）项目可在不冲突的前提下扩展，不必另起文件。",
+      "new": "本文件是 {{PROJECT}} 的工程基线，从 [Rune](https://github.com/whiteisclosing/rune) 母版整段拷贝（commit `{{RUNE_COMMIT}}`，{{RUNE_DATE}}），引入后归 {{PROJECT}} 自治。\n\n- **内容归 {{PROJECT}} 所有**：物理上属于本仓库，可自由增删改\n- **无跨项目活引用**：没有 submodule / @ 导入；所有规则都是本仓自有资产\n- **单一规范层**：本文件即唯一规范，不再区分 L1/L2\n\n**与 Rune 母版的关系**：母版会在 [Rune 仓](https://github.com/whiteisclosing/rune) 持续打磨；母版的非 CRITICAL 改动**不**反向同步到本仓——要采纳哪条改动靠本仓手动 diff + cherry-pick。例外是 CRITICAL 级新规则（如 A-TZ），由 Rune 通过 `sync-rune-master` skill 主动开 PR 到本仓（详 §七）。\n\n**项目专属规则放哪**：直接累积到 §九（已开始），与 §五 A–F 编号衔接（A2 / C7 / D3...），不必另起文件。"
+    },
+    {
+      "old": "## 七、元规则：持续打磨 Rune\n\n协作中发现以下情况，**主动提议**更新 Rune 母版（添、删、改都包括）：\n\n- 母版规则写得不清楚 / 会误判 → 改本文件\n- 母版规则在实际项目里几乎都被覆写或忽略 → 提议简化或删除\n- 项目专属规则在多个项目都重复出现 → 提议提升到 Rune 母版\n- 某个模板 / 约束从未被执行或复用 → 提议删除\n- 新工作流模式值得固化 → 提议新增规则\n\nRune 是活文档，不是刻在石头上的。**该加就加，该砍就砍**——每条规则都必须能在实际项目里观测到收益，否则它就是噪音。\n\n**重要（默认）**：母版改动只影响**未来**新建项目。已有项目要不要同步是各项目自己的事；Rune 不主动推送。\n\n**例外（CRITICAL 级回溯传播）**：CRITICAL 级新规则（如 A-TZ）破坏正确性而非偏好——这种规则建议**主动回溯**到所有已有项目，避免\"母版有规、项目无规\"的合规漂移。流程见 `.claude/skills/sync-rune-master/`：写一份 patch spec（`(old, new)` 字符串对 + 目标项目列表）→ 跑 `sync.py` → 自动 fetch / patch / push / open PR 到所有姐妹项目。HIGH 及以下级别**不**建议自动回溯，留给项目自决。",
+      "new": "## 七、元规则：何时反馈给 Rune 母版\n\n{{PROJECT}} 在协作中发现以下情况，**主动提议**到 [Rune 仓](https://github.com/whiteisclosing/rune)（开 issue / PR）；同时本文件可立即修订（项目自治），不必等母版回应：\n\n- §一–§八（来自母版）规则写得不清楚 / 会误判 → 同时改本文件 + 提 Rune issue\n- §一–§八 在 {{PROJECT}} 几乎都被覆写或忽略 → 提议 Rune 简化或删除\n- §九 项目专属规则若同样适用其他姐妹项目（被多项目重复抄写）→ 提议提升到 Rune 母版\n- 新工作流模式在 {{PROJECT}} 验证收敛后 → 提议加入 Rune 母版\n\n本文件与 Rune 母版都是活文档，不是刻在石头上的。**该加就加，该砍就砍**——每条规则都必须能在 {{PROJECT}} 观测到收益，否则它就是噪音。\n\n**默认：母版 → 本仓不自动同步**。Rune 母版的非 CRITICAL 改动只影响未来新建项目；本仓要采纳哪条改动靠手动 diff + cherry-pick。\n\n**例外：CRITICAL 级回溯传播**。Rune 母版的 CRITICAL 级新规则（如 A-TZ，破坏正确性而非偏好）会通过 Rune 仓的 `sync-rune-master` skill 主动开 PR 到本仓——这种 PR 收到后正常 review + merge，避免\"母版有规、本仓无规\"的合规漂移。HIGH 及以下级别母版改动不会主动推送到本仓。"
+    },
+    {
+      "old": "**引入与演化层面：**\n\n- ❌ 把项目专属规则提交到 Rune 母版（应留在项目 `CLAUDE.md` 自己加） → 一.单一规范层\n- ❌ 引入时只拷贝部分章节，遗漏 A–F 或反模式 → 六.步骤 3\n- ❌ 引入后跑回 Rune 母版改规则（应改项目自己的 `CLAUDE.md`） → 一.拷贝后归项目所有\n- ❌ 引入后没追加项目 P1 / 项目硬约束 / 规则级约束表 → 六.步骤 4\n- ❌ 引入后没删\"## 六、新项目引入 Rune\"节（保留无意义） → 六.步骤 5\n- ❌ 引入后跳过本地化（标题 / §一 / §七 / §八 仍以 Rune 自称，\"项目 CLAUDE.md 自称是 Rune 母版\"） → 六.步骤 6\n- ❌ Rune 母版改了，期望已有项目自动同步（不会同步，要手动 diff） → 一.不再有跨项目活引用",
+      "new": "**与 Rune 母版协作层面：**\n\n- ❌ 把 {{PROJECT}} 项目专属规则提交到 Rune 母版（应该留在本文件 §九） → 一.单一规范层\n- ❌ 跑回 Rune 母版改规则去修 {{PROJECT}} 的问题（应改本文件 + 跨项目议题再提 Rune issue） → 一.\"与 Rune 母版的关系\"\n- ❌ Rune 母版改了，期望本仓自动同步——除 CRITICAL 经 sync-rune-master 外都不同步，要本仓手动 diff → 一.\"与 Rune 母版的关系\" / 七"
+    }
+  ],
+  "targets": []
+}
